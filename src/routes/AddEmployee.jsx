@@ -49,6 +49,11 @@ const Button = styled.button`
   }
 `;
 
+const ErrorMessage = styled.div`
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+`;
 const SuccessMessage = styled.div`
   color: green;
   margin-top: 10px;
@@ -68,7 +73,8 @@ const EmployeeForm = () => {
   });
 
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -79,13 +85,20 @@ const EmployeeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (emailError) {
+      console.error("Email error:", emailError);
+      setErrorMessage("Error adding employee. Please fix the email format.");
+      setTimeout(()=>{
+        setErrorMessage("");
+      },2000)
+      return;
+    }
     try {
       const response = await EmployeeService.addEmployee(formData);
       setSuccessMessage("Employee added successfully!");
-      setTimeout(()=>{
-        navigate('/');
-      },2000)
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.error("Error adding employee:", error);
       setSuccessMessage("Error adding employee. Please try again.");
@@ -138,11 +151,23 @@ const EmployeeForm = () => {
         <FormSection>
           <h3>Email:</h3>
           <Input
-            type="email"
+            type="text"
             name="email"
             placeholder="Enter email address"
             value={formData.email}
             onChange={handleChange}
+            onBlur={(e) => {
+              const enteredEmail = e.target.value;
+              const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                enteredEmail
+              );
+
+              if (!isEmailValid) {
+                setEmailError("Invalid email format");
+              } else {
+                setEmailError("");
+              }
+            }}
           />
         </FormSection>
 
@@ -214,6 +239,7 @@ const EmployeeForm = () => {
           </Button>
         </FormSection>
         {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
+        {errorMessage&&<ErrorMessage>{errorMessage}</ErrorMessage>}
       </form>
     </Container>
   );

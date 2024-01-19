@@ -56,7 +56,7 @@ const Home = () => {
           <h3>Loading...</h3>
         </div>
       ) : (
-        <div style={{ maxWidth: "87vw", margin: "0 35px" }}>
+        <div style={{Width: "88vw", margin: "0 35px" }}>
           <Typography
             variant="h4"
             style={{

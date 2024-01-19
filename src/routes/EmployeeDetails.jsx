@@ -58,17 +58,17 @@ const Button = styled.button`
 const ErrorMessage = styled.div`
   color: red;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const SuccessMessage = styled.div`
   color: green;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const DeleteButton = styled(Button)`
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   background-color: ${(props) =>
     props.isUpdate ? "rgb(101, 100, 100)" : "rgb(246, 46, 46)"};
   &:hover {
@@ -127,7 +127,7 @@ const EmployeeDetails = () => {
   const updateEmployee = async (e) => {
     e.preventDefault();
     if (!isValidEmail(employee.email)) {
-      setErrorMessage("Invalid email format");
+      setErrorMessage("Error updating employee. Please fix the email format.");
       setTimeout(() => {
         setErrorMessage("");
       }, 2000);
